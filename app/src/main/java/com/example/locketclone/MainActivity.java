@@ -1,14 +1,29 @@
 package com.example.locketclone;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.view.LayoutInflater;
 
-import android.os.Bundle;
+import com.example.locketclone.base.BaseActivity;
+import com.example.locketclone.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void initData() {
+
+    }
+
+    @Override
+    public void handleEvent() {
+
+    }
+
+    @Override
+    public void bindData() {
+
+    }
+
+    @Override
+    protected ActivityMainBinding inflateViewBinding(LayoutInflater inflater) {
+        return ActivityMainBinding.inflate(inflater);
     }
 }
