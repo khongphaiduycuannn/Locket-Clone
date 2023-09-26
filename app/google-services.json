@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "924966708138",
+    "project_id": "locket-clone-9b9e8",
+    "storage_bucket": "locket-clone-9b9e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924966708138:android:7e8b1688c931a63aac41d3",
+        "android_client_info": {
+          "package_name": "com.example.locketclone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuJ_YCgHDjbRr5Mtki2Z--NbKkRlI30b4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
