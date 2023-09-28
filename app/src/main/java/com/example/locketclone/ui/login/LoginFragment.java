@@ -25,6 +25,10 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
         getBinding().btnSignUp.setOnClickListener(view -> {
             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_loginEmailFragment);
         });
+
+        getBinding().btnSignIn.setOnClickListener(view -> {
+            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_signUpEmailFragment);
+        });
     }
 
     @Override

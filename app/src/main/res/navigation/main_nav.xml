@@ -17,6 +17,13 @@
             app:exitAnim="@anim/transition_left_out"
             app:popEnterAnim="@anim/transition_left_in"
             app:popExitAnim="@anim/transition_right_out" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpEmailFragment"
+            app:destination="@id/signUpEmailFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_left_in"
+            app:popExitAnim="@anim/transition_right_out" />
     </fragment>
     <fragment
         android:id="@+id/loginEmailFragment"
@@ -49,4 +56,22 @@
         android:name="com.example.locketclone.ui.login.LoginUsernameFragment"
         android:label="fragment_login_username"
         tools:layout="@layout/fragment_login_username" />
+    <fragment
+        android:id="@+id/signUpEmailFragment"
+        android:name="com.example.locketclone.ui.register.SignUpEmailFragment"
+        android:label="fragment_sign_up_email"
+        tools:layout="@layout/fragment_sign_up_email" >
+        <action
+            android:id="@+id/action_signUpEmailFragment_to_signUpPasswordFragment"
+            app:destination="@id/signUpPasswordFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_left_in"
+            app:popExitAnim="@anim/transition_right_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpPasswordFragment"
+        android:name="com.example.locketclone.ui.register.SignUpPasswordFragment"
+        android:label="fragment_sign_up_password"
+        tools:layout="@layout/fragment_sign_up_password" />
 </navigation>
