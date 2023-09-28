@@ -7,7 +7,46 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.locketclone.ui.LoginFragment"
+        android:name="com.example.locketclone.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_loginEmailFragment"
+            app:destination="@id/loginEmailFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_left_in"
+            app:popExitAnim="@anim/transition_right_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginEmailFragment"
+        android:name="com.example.locketclone.ui.login.LoginEmailFragment"
+        android:label="fragment_login_email"
+        tools:layout="@layout/fragment_login_email" >
+        <action
+            android:id="@+id/action_loginEmailFragment_to_loginPasswordFragment"
+            app:destination="@id/loginPasswordFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_left_in"
+            app:popExitAnim="@anim/transition_right_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginPasswordFragment"
+        android:name="com.example.locketclone.ui.login.LoginPasswordFragment"
+        android:label="fragment_login_password"
+        tools:layout="@layout/fragment_login_password" >
+        <action
+            android:id="@+id/action_loginPasswordFragment_to_loginUsernameFragment"
+            app:destination="@id/loginUsernameFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_left_in"
+            app:popExitAnim="@anim/transition_right_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginUsernameFragment"
+        android:name="com.example.locketclone.ui.login.LoginUsernameFragment"
+        android:label="fragment_login_username"
+        tools:layout="@layout/fragment_login_username" />
 </navigation>
