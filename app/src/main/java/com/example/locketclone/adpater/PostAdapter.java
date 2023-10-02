@@ -2,8 +2,11 @@ package com.example.locketclone.adpater;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -17,6 +20,7 @@ import com.example.locketclone.ui.history.HistoryViewModel;
 
 import java.util.ArrayList;
 
+@SuppressLint("ClickableViewAccessibility")
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
     private Fragment fragment;
@@ -51,10 +55,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         R.drawable.image
                 )
         );
-        holder.binding.image.setOnClickListener(view -> {
-            historyViewModel.flipStatus();
-            historyViewModel.setCurrentPos(position);
-        });
+
+        holder.binding.imageContainer.setOnTouchListener((view, motionEvent) ->
+                onImageTouch(view, motionEvent, position)
+        );
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -62,6 +66,44 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.listPosts.clear();
         this.listPosts.addAll(listPosts);
         notifyDataSetChanged();
+    }
+
+    private boolean onImageTouch(View view, MotionEvent motionEvent, int position) {
+        ScaleAnimation zoomInAnimation = new ScaleAnimation(
+                1f, 0.9f,
+                1f, 0.9f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
+        zoomInAnimation.setDuration(150);
+        zoomInAnimation.setFillAfter(true);
+
+        ScaleAnimation zoomOutAnimation = new ScaleAnimation(
+                0.9f, 1f,
+                0.9f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+        );
+        zoomOutAnimation.setDuration(150);
+        zoomOutAnimation.setFillAfter(true);
+
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                view.startAnimation(zoomInAnimation);
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                view.startAnimation(zoomOutAnimation);
+                historyViewModel.flipStatus();
+                historyViewModel.setCurrentPos(position);
+                break;
+            }
+            case MotionEvent.ACTION_CANCEL: {
+                view.startAnimation(zoomOutAnimation);
+                break;
+            }
+        }
+        return true;
     }
 
     static class PostViewHolder extends RecyclerView.ViewHolder {
