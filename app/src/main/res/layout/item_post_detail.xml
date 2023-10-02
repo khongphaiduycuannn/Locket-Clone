@@ -1,6 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#101010"
+    android:orientation="vertical">
 
+    <ImageButton
+        android:id="@+id/btn_post_setting"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="end"
+        android:layout_marginHorizontal="10dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_more"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_post_image"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/image"
+                app:layout_constraintDimensionRatio="H,1:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/img_post_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_post_content"
+            android:fontFamily="@font/varela"
+            android:gravity="center"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="5dp"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="One day" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/layout_post_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_post_owner"
+        android:orientation="horizontal"
+        android:paddingHorizontal="13dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="0.2">
+
+        <TextView
+            android:id="@+id/txt_post_owner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/varela"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Duy Quan" />
+
+        <TextView
+            android:id="@+id/txt_post_time_created"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/varela"
+            android:gravity="center"
+            android:textColor="#A9A9A9"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="3d" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="17dp"
+            android:background="@android:color/transparent"
+            android:padding="7dp"
+            android:src="@drawable/ic_galery" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_post_owner"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/varela"
+                android:gravity="center"
+                android:text="Emotion here!"
+                android:textColor="#FFFFFF"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
