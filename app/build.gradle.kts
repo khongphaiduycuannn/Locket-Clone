@@ -56,4 +56,8 @@ dependencies {
 
     // Carbon
     implementation("com.github.ZieIony.carbon:carbon:3e929fcff4")
+
+    // View model
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 }
