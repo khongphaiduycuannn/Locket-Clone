@@ -1,6 +1,6 @@
 package com.example.locketclone.ui.history;
 
-import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewTreeObserver;
 
@@ -17,6 +17,7 @@ import com.example.locketclone.databinding.FragmentHistoryBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import carbon.view.View;
 
@@ -59,6 +60,7 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
         historyViewModel.currentPos.observe(getViewLifecycleOwner(), position -> {
             getBinding().recyclerListPost.scrollToPosition(position);
             getBinding().recyclerDetailPost.scrollToPosition(position);
+            allPixels = position * itemHeight;
         });
 
         historyViewModel.status.observe(getViewLifecycleOwner(), status -> {
@@ -100,8 +102,8 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
                         super.onScrollStateChanged(recyclerView, newState);
                         synchronized (this) {
                             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                calculatePositionAndScroll(recyclerView);
                                 currentPosition = Math.round(((allPixels + padding - firstItemHeight) / itemHeight));
+                                calculatePositionAndScroll(recyclerView);
                             }
                         }
                     }
@@ -127,7 +129,7 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
         int expectedPosition = Math.round((allPixels + padding - firstItemHeight) / itemHeight);
         if (expectedPosition == -1) {
             expectedPosition = 0;
-        } else if (expectedPosition >= recyclerView.getAdapter().getItemCount() - 2) {
+        } else if (expectedPosition >= recyclerView.getAdapter().getItemCount()) {
             expectedPosition--;
         }
         scrollListToPosition(recyclerView, expectedPosition);
