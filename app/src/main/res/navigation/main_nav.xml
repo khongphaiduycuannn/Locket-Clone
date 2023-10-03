@@ -74,4 +74,9 @@
         android:name="com.example.locketclone.ui.register.SignUpPasswordFragment"
         android:label="fragment_sign_up_password"
         tools:layout="@layout/fragment_sign_up_password" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.locketclone.ui.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>
