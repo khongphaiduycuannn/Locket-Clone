@@ -1,7 +1,17 @@
 package com.example.locketclone.ui.history;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.locketclone.R;
 import com.example.locketclone.adpater.PostAdapter;
 import com.example.locketclone.adpater.PostDetailAdapter;
 import com.example.locketclone.base.BaseFragment;
@@ -57,30 +68,66 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
             historyViewModel.setCurrentPos(Math.round(allPixels / itemHeight));
         });
 
+        getBinding().toolbar.btnPostSetting.setOnClickListener(view -> {
+            showSettingDialog();
+        });
+
         historyViewModel.currentPos.observe(getViewLifecycleOwner(), position -> {
             getBinding().recyclerListPost.scrollToPosition(position);
             getBinding().recyclerDetailPost.scrollToPosition(position);
             allPixels = position * itemHeight;
         });
 
-        historyViewModel.status.observe(getViewLifecycleOwner(), status -> {
-            if (status) {
-                getBinding().recyclerListPost.setVisibility(View.VISIBLE);
-                getBinding().recyclerDetailPost.setVisibility(View.GONE);
-                getBinding().bottomBar.setVisibility(View.GONE);
-                getBinding().toolbar.btnPostSetting.setVisibility(View.GONE);
-            } else {
-                getBinding().recyclerListPost.setVisibility(View.GONE);
-                getBinding().recyclerDetailPost.setVisibility(View.VISIBLE);
-                getBinding().bottomBar.setVisibility(View.VISIBLE);
-                getBinding().toolbar.btnPostSetting.setVisibility(View.VISIBLE);
-            }
-        });
+        historyViewModel.status.observe(getViewLifecycleOwner(), this::onStatusChange);
     }
 
     @Override
     protected FragmentHistoryBinding inflateViewBinding(LayoutInflater inflater) {
         return FragmentHistoryBinding.inflate(inflater);
+    }
+
+    private void showSettingDialog() {
+        Dialog settingDialog = new Dialog(requireContext());
+        settingDialog.setContentView(R.layout.dialog_post_setting);
+
+        Window window = settingDialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setLayout(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+        settingDialog.show();
+    }
+
+    private void onStatusChange(boolean newStatus) {
+        AnimatorSet fadeIn = (AnimatorSet) AnimatorInflater.loadAnimator(
+                requireContext(), R.animator.transition_fade_in
+        );
+        AnimatorSet fadeOut = (AnimatorSet) AnimatorInflater.loadAnimator(
+                requireContext(), R.animator.transition_fade_out
+        );
+
+        RecyclerView recyclerListPost = getBinding().recyclerListPost;
+        RecyclerView recyclerDetailPost = getBinding().recyclerDetailPost;
+
+        if (newStatus) {
+            fadeIn.setTarget(recyclerListPost);
+            fadeOut.setTarget(recyclerDetailPost);
+            recyclerListPost.setVisibility(View.VISIBLE);
+            recyclerDetailPost.setVisibility(View.INVISIBLE);
+            getBinding().bottomBar.setVisibility(View.INVISIBLE);
+            getBinding().toolbar.btnPostSetting.setVisibility(View.INVISIBLE);
+        } else {
+            fadeIn.setTarget(recyclerDetailPost);
+            fadeOut.setTarget(recyclerListPost);
+            recyclerListPost.setVisibility(View.INVISIBLE);
+            recyclerDetailPost.setVisibility(View.VISIBLE);
+            getBinding().bottomBar.setVisibility(View.VISIBLE);
+            getBinding().toolbar.btnPostSetting.setVisibility(View.VISIBLE);
+        }
+        fadeIn.start();
+        fadeOut.start();
     }
 
     private void getRecyclerPostDetail() {
