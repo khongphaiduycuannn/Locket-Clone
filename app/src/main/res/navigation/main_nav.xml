@@ -80,6 +80,24 @@
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
     <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.locketclone.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editUsernameFragment"
+            app:destination="@id/editUsernameFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_left_in"
+            app:popExitAnim="@anim/transition_right_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/editUsernameFragment"
+        android:name="com.example.locketclone.ui.profile.EditUsernameFragment"
+        android:label="fragment_edit_username"
+        tools:layout="@layout/fragment_edit_username" />
+    <fragment
         android:id="@+id/friendsFragment"
         android:name="com.example.locketclone.ui.friends.FriendsFragment"
         android:label="fragment_friends"
