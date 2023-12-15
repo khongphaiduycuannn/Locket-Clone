@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/friendsFragment">
+    app:startDestination="@id/cameraFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -102,4 +102,9 @@
         android:name="com.example.locketclone.ui.friends.FriendsFragment"
         android:label="fragment_friends"
         tools:layout="@layout/fragment_friends" />
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.locketclone.ui.camera.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
 </navigation>
