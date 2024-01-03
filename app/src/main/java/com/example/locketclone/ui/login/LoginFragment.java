@@ -8,8 +8,11 @@ import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentLoginBinding;
+import com.example.locketclone.repository.UserRepository;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
+
+    private UserRepository userRepository = new UserRepository();
 
     @Override
     public void initData() {
@@ -40,7 +43,9 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private void checkUserId() {
         String userId = MyApplication.getUserId();
         if (!(userId == null || userId.isEmpty() || userId.isBlank())) {
-            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_cameraFragment2);
+            userRepository.getUserById(userId, () -> {
+                Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_cameraFragment2);
+            });
         }
     }
 }

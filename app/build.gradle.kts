@@ -65,4 +65,7 @@ dependencies {
 
     // Cloudinary
     implementation("com.cloudinary:cloudinary-android-core:2.5.0")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

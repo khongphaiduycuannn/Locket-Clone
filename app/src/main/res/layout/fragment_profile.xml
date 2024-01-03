@@ -104,57 +104,6 @@
             android:textStyle="bold" />
 
         <LinearLayout
-            android:id="@+id/ln_general"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:layout_marginTop="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="@font/varela"
-                android:text="General"
-                android:textColor="#B6B6B6"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:id="@+id/btn_change_email"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@drawable/bg_btn_change_email"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="10dp">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/ic_email" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/varela"
-                    android:text="Change email address"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_back_right" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/ln_about"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
