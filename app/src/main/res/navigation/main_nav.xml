@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/cameraFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -76,7 +76,15 @@
         android:id="@+id/signUpPasswordFragment"
         android:name="com.example.locketclone.ui.register.SignUpPasswordFragment"
         android:label="fragment_sign_up_password"
-        tools:layout="@layout/fragment_sign_up_password" />
+        tools:layout="@layout/fragment_sign_up_password" >
+        <action
+            android:id="@+id/action_signUpPasswordFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/transition_right_in"
+            app:exitAnim="@anim/transition_left_out"
+            app:popEnterAnim="@anim/transition_right_out"
+            app:popExitAnim="@anim/transition_left_in" />
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.example.locketclone.ui.history.HistoryFragment"

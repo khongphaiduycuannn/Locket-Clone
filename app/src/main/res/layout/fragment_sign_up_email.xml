@@ -49,6 +49,7 @@
             android:paddingHorizontal="18dp"
             android:paddingVertical="14dp"
             android:singleLine="true"
+            android:text="minhquanminhquan1010@gmail.com"
             android:textColor="#FFFFFF"
             android:textColorHint="#878787"
             android:textCursorDrawable="@drawable/edt_cursor"
