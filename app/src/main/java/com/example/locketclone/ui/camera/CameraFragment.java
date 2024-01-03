@@ -3,10 +3,12 @@ package com.example.locketclone.ui.camera;
 import android.annotation.SuppressLint;
 import android.hardware.Camera;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -29,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,28 +41,21 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
     private CameraViewModel cameraViewModel;
 
     private Camera camera;
-    private Camera frontCamera;
-    private CameraPreview frontCameraPreview;
     private CameraPreview backCameraPreview;
     private Camera.PictureCallback picture;
     private Camera.Parameters parameters;
 
     private FriendChooseAdapter friendChooseAdapter;
 
-    private ArrayList<String> data = new ArrayList<>(
-            Arrays.asList("A", "A", "A", "A", "A", "A"));
+    private ArrayList<String> data = new ArrayList<>(Arrays.asList("A", "A", "A", "A", "A", "A"));
 
     @Override
     public void initData() {
-        initConfig();
         cameraViewModel = new ViewModelProvider(this).get(CameraViewModel.class);
         camera = getBackCameraInstance();
-//        frontCamera = getFrontCameraInstance();
         if (camera != null) {
             camera.setDisplayOrientation(90);
-//            frontCamera.setDisplayOrientation(90);
             backCameraPreview = new CameraPreview(requireContext(), camera);
-            frontCameraPreview = new CameraPreview(requireContext(), frontCamera);
             parameters = camera.getParameters();
         }
         picture = (data, camera) -> cameraViewModel.setImage(data);
@@ -70,9 +64,16 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
 
     @Override
     public void initView() {
+        camera.startPreview();
         if (backCameraPreview != null) {
             FrameLayout preview = getBinding().cameraPreview;
-            preview.addView(backCameraPreview);
+            ViewGroup parentView = (ViewGroup) backCameraPreview.getParent();
+            if (parentView != null) {
+                parentView.removeView(backCameraPreview);
+            }
+            new Handler().postDelayed(() -> {
+                preview.addView(backCameraPreview);
+            }, 500);
         }
         setFriendsChoose();
         setPreviewSize();
@@ -94,22 +95,7 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
         });
 
         getBinding().btnDownload.setOnClickListener(view -> {
-            File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-            if (pictureFile == null) {
-                Log.d("", "Error creating media file, check storage permissions");
-                return;
-            }
-
-            try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(cameraViewModel.image);
-                fos.close();
-                Toast.makeText(requireContext(), "Download success!", Toast.LENGTH_LONG).show();
-            } catch (FileNotFoundException e) {
-                Log.d("", "File not found: " + e.getMessage());
-            } catch (IOException e) {
-                Log.d("", "Error accessing file: " + e.getMessage());
-            }
+            savePhoto();
         });
 
         Camera.AutoFocusCallback autoFocusCallback = (success, camera) -> {
@@ -148,41 +134,35 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
         });
 
         getBinding().btnSend.setOnClickListener(view -> {
-//            if (camera != null) {
-//                cameraViewModel.flipStatus();
-//            }
-
             byte[] image = cameraViewModel.image;
             if (image != null) {
-                MediaManager.get()
-                        .upload(image)
-                        .callback(new UploadCallback() {
-                            @Override
-                            public void onStart(String requestId) {
+                MediaManager.get().upload(image).callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onProgress(String requestId, long bytes, long totalBytes) {
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onSuccess(String requestId, Map resultData) {
-                                Toast.makeText(requireContext(), "Upload success!", Toast.LENGTH_LONG).show();
-                                cameraViewModel.flipStatus();
-                            }
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        Toast.makeText(requireContext(), "Upload success!", Toast.LENGTH_LONG).show();
+                        cameraViewModel.flipStatus();
+                    }
 
-                            @Override
-                            public void onError(String requestId, ErrorInfo error) {
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
 
-                            }
+                    }
 
-                            @Override
-                            public void onReschedule(String requestId, ErrorInfo error) {
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
 
-                            }
-                        }).dispatch();
+                    }
+                }).dispatch();
             }
         });
 
@@ -192,7 +172,6 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
 
         cameraViewModel.status.observe(getViewLifecycleOwner(), this::onStatusChange);
         cameraViewModel.flashMode.observe(getViewLifecycleOwner(), this::onFlashModeChange);
-//        cameraViewModel.cameraMode.observe(getViewLifecycleOwner(), this::onCameraModeChange);
     }
 
     @Override
@@ -200,8 +179,16 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
         return FragmentCameraBinding.inflate(inflater);
     }
 
-    public void initConfig() {
+    @Override
+    public void onPause() {
+        camera.stopPreview();
+        super.onPause();
+    }
 
+    @Override
+    public void onStop() {
+        camera.stopPreview();
+        super.onStop();
     }
 
     public void onStatusChange(boolean newStatus) {
@@ -228,20 +215,7 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
             getBinding().btnFlash.setImageResource(R.drawable.ic_flash_off);
         }
         camera.setParameters(parameters);
-//        frontCamera.setParameters(parameters);
     }
-
-//    public void onCameraModeChange(boolean newCameraMode) {
-//        FrameLayout preview = getBinding().cameraPreview;
-//        preview.removeAllViews();
-//        if (newCameraMode) {
-//            preview.addView(backCameraPreview);
-//        }
-//        else {
-//            preview.addView(frontCameraPreview);
-//        }
-//        setPreviewSize();
-//    }
 
     private void setFriendsChoose() {
         getBinding().rclFriendShare.setAdapter(friendChooseAdapter);
@@ -253,18 +227,7 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
         Camera.Size optimalSize = getOptimalPreviewSize(sizes, getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels);
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
         camera.setParameters(parameters);
-//        frontCamera.setParameters(parameters);
     }
-
-//    public Camera getFrontCameraInstance() {
-//        Camera camera = null;
-//        try {
-//            camera = openFrontFacingCamera();
-//        } catch (Exception e) {
-//            Log.e("Camera Fragment", "Error opening camera: " + e.getMessage());
-//        }
-//        return camera;
-//    }
 
     public Camera getBackCameraInstance() {
         Camera camera = null;
@@ -275,25 +238,6 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
         }
         return camera;
     }
-
-//    private Camera openFrontFacingCamera() {
-//        int cameraCount = 0;
-//        Camera cam = null;
-//        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-//        cameraCount = Camera.getNumberOfCameras();
-//        for (int camIdx = 0; camIdx < cameraCount; camIdx++) {
-//            Camera.getCameraInfo(camIdx, cameraInfo);
-//            if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-//                try {
-//                    cam = Camera.open(camIdx);
-//                } catch (RuntimeException e) {
-//                    Log.e("Camera Fragment", "Camera failed to open: " + e.getLocalizedMessage());
-//                }
-//            }
-//        }
-//
-//        return cam;
-//    }
 
     public Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
         final double ASPECT_TOLERANCE = 0.05;
@@ -326,10 +270,7 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
     }
 
     private File getOutputMediaFile(int type) {
-        File mediaStorageDir = new File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                "CameraPD"
-        );
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "CameraPD");
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -345,6 +286,25 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
 
             default:
                 return null;
+        }
+    }
+
+    private void savePhoto() {
+        File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+        if (pictureFile == null) {
+            Log.d("", "Error creating media file, check storage permissions");
+            return;
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            fos.write(cameraViewModel.image);
+            fos.close();
+            Toast.makeText(requireContext(), "Download success!", Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            Log.d("", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d("", "Error accessing file: " + e.getMessage());
         }
     }
 }

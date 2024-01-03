@@ -2,6 +2,7 @@ package com.example.locketclone.ui.friends;
 
 import android.view.LayoutInflater;
 
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.locketclone.adpater.FriendAdapter;
@@ -50,7 +51,9 @@ public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
 
     @Override
     public void initEvent() {
-
+        getBinding().btnBack.setOnClickListener(view -> {
+            Navigation.findNavController(getView()).popBackStack();
+        });
     }
 
     @Override

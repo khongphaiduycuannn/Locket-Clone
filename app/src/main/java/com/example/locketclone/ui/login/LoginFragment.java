@@ -30,9 +30,6 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
         getBinding().btnSignIn.setOnClickListener(view -> {
             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_signUpEmailFragment);
         });
-        getBinding().pop.setOnClickListener(view -> {
-            Navigation.findNavController(getView()).popBackStack();
-        });
     }
 
     @Override

@@ -41,6 +41,10 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
             MyApplication.clearUserId();
             Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_loginFragment);
         });
+
+        getBinding().btnBack.setOnClickListener(view -> {
+            Navigation.findNavController(getView()).popBackStack();
+        });
     }
 
     @Override
