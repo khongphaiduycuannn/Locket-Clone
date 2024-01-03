@@ -55,12 +55,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/camera"
+            <FrameLayout
+                android:id="@+id/camera_preview"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/image"
+                android:background="@color/carbon_blue_100"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -90,13 +89,13 @@
                 android:layout_height="50dp"
                 android:src="@drawable/ic_flash_off"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_shot"
+                app:layout_constraintEnd_toStartOf="@+id/btn_capture"
                 app:layout_constraintHorizontal_bias="0.25"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/btn_shot"
+                android:id="@+id/btn_capture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:backgroundTint="#FFB802"
@@ -136,7 +135,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.75"
-                app:layout_constraintStart_toEndOf="@+id/btn_shot"
+                app:layout_constraintStart_toEndOf="@+id/btn_capture"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -195,31 +194,58 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/btn_history_nav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
         android:layout_gravity="center"
-        android:layout_marginVertical="10dp"
-        android:orientation="vertical">
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginVertical="10dp">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/ln_history_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/varela"
+                android:text="History"
+                android:textColor="#FFFFFF"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="2dp"
+                android:scaleX="1.5"
+                android:src="@drawable/ic_back_down" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ln_friend_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/varela"
-            android:text="History"
-            android:textColor="#FFFFFF"
-            android:textSize="21sp"
-            android:textStyle="bold" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="15dp"
+            android:visibility="gone">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="2dp"
-            android:scaleX="1.5"
-            android:src="@drawable/ic_back_down" />
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcl_friend_share"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_friend_choose" />
+        </LinearLayout>
+    </FrameLayout>
 
     <Space
         android:layout_width="0dp"

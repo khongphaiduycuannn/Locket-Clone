@@ -60,4 +60,7 @@ dependencies {
     // View model
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+
+    // Cloudinary
+    implementation("com.cloudinary:cloudinary-android-core:2.5.0")
 }
