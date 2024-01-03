@@ -8,12 +8,13 @@ public class User {
 
     private String email;
 
+    private String password;
+
     private String firstName;
 
     private String lastName;
 
-    private String password;
-
+    private String avatar = "https://res.cloudinary.com/dh9ougddd/image/upload/v1693305148/m1nhqsruh3ydexbr0wqq.webp";
     private String phone;
 
     private ArrayList<String> friends = new ArrayList<>();
@@ -43,6 +44,14 @@ public class User {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getEmail() {
