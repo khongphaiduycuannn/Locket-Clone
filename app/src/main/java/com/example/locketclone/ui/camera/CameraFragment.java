@@ -93,10 +93,6 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
             Navigation.findNavController(getView()).navigate(R.id.action_cameraFragment_to_historyFragment);
         });
 
-        getBinding().btnCapture.setOnClickListener(view -> {
-            Navigation.findNavController(getView()).navigate(R.id.action_cameraFragment_to_loginFragment);
-        });
-
         getBinding().btnDownload.setOnClickListener(view -> {
             File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
             if (pictureFile == null) {
@@ -205,11 +201,7 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
     }
 
     public void initConfig() {
-        HashMap<String, String> config = new HashMap<>();
-        config.put("cloud_name", "dh9ougddd");
-        config.put("api_key", "731328598728427");
-        config.put("api_secret", "9cayqFpAlaCGOnudfeaW-hGFsQ0");
-        MediaManager.init(requireContext(), config);
+
     }
 
     public void onStatusChange(boolean newStatus) {
