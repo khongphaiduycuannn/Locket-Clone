@@ -4,19 +4,24 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentSignUpEmailBinding;
 
 public class SignUpEmailFragment extends BaseFragment<FragmentSignUpEmailBinding> {
 
+    private SignUpViewModel signUpViewModel;
+
     @Override
     public void initData() {
-
+        signUpViewModel = new ViewModelProvider(getActivity()).get(SignUpViewModel.class);
     }
 
     @Override
@@ -27,15 +32,18 @@ public class SignUpEmailFragment extends BaseFragment<FragmentSignUpEmailBinding
     @Override
     public void initEvent() {
         getBinding().btnContinue.setOnClickListener(view -> {
-            Navigation.findNavController(getView()).navigate(R.id.action_signUpEmailFragment_to_signUpPasswordFragment);
+            String email = getBinding().edtEmail.getText().toString();
+            if (!email.isEmpty() && !email.isBlank()) {
+                signUpViewModel.setEmail(email);
+                Navigation.findNavController(getView()).navigate(R.id.action_signUpEmailFragment_to_signUpPasswordFragment);
+            }
+            else {
+                Toast.makeText(requireContext(), "Email invalidate", Toast.LENGTH_LONG).show();
+            }
         });
 
         getBinding().btnBack.setOnClickListener(view -> {
             Navigation.findNavController(getView()).popBackStack();
-        });
-
-        getBinding().btnUsePhone.setOnClickListener(view -> {
-            usePhone();
         });
 
         getBinding().edtEmail.addTextChangedListener(textWatcher());
@@ -44,20 +52,6 @@ public class SignUpEmailFragment extends BaseFragment<FragmentSignUpEmailBinding
     @Override
     protected FragmentSignUpEmailBinding inflateViewBinding(LayoutInflater inflater) {
         return FragmentSignUpEmailBinding.inflate(inflater);
-    }
-
-    private void usePhone() {
-        String status = getBinding().btnUsePhone.getText().toString();
-        if (status.equals("Use phone instead")) {
-            getBinding().txtTitle.setText("What's your phone?");
-            getBinding().btnUsePhone.setText("Use email instead");
-            getBinding().edtEmail.setHint("Phone number");
-        }
-        else {
-            getBinding().txtTitle.setText("What's your email?");
-            getBinding().btnUsePhone.setText("Use phone instead");
-            getBinding().edtEmail.setHint("Email address");
-        }
     }
 
     private TextWatcher textWatcher() {

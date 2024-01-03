@@ -54,22 +54,6 @@
             android:textCursorDrawable="@drawable/edt_cursor"
             android:textSize="19sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/btn_use_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_btn_continue_disable"
-            android:fontFamily="@font/varela"
-            android:gravity="center"
-            android:paddingHorizontal="11dp"
-            android:paddingVertical="5dp"
-            android:text="Use phone instead"
-            android:textColor="#EBEBEB"
-            android:textSize="16sp"
-            android:textStyle="bold" />
     </LinearLayout>
 
     <Space

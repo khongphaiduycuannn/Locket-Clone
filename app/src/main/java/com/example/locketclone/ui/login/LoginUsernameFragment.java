@@ -4,19 +4,36 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentLoginUsernameBinding;
+import com.example.locketclone.model.Newsfeed;
+import com.example.locketclone.model.User;
+import com.example.locketclone.repository.NewsfeedRepository;
+import com.example.locketclone.repository.UserRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginUsernameFragment extends BaseFragment<FragmentLoginUsernameBinding> {
 
+    private LoginViewModel loginViewModel;
+
+    private FirebaseAuth firebaseAuth;
+
+    private UserRepository userRepository = new UserRepository();
+
+    private NewsfeedRepository newsfeedRepository = new NewsfeedRepository();
+
+
     @Override
     public void initData() {
-
+        loginViewModel = new ViewModelProvider(getActivity()).get(LoginViewModel.class);
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -28,6 +45,16 @@ public class LoginUsernameFragment extends BaseFragment<FragmentLoginUsernameBin
     public void initEvent() {
         getBinding().btnBack.setOnClickListener(view -> {
             Navigation.findNavController(getView()).popBackStack();
+        });
+
+        getBinding().btnContinue.setOnClickListener(view -> {
+            String firstName = getBinding().edtFirstName.getText().toString();
+            String lastName = getBinding().edtLastName.getText().toString();
+            if (!firstName.isEmpty() && !firstName.isBlank() && !lastName.isEmpty() && !lastName.isBlank()) {
+                register(loginViewModel.email, loginViewModel.password, firstName, lastName);
+            } else {
+                Toast.makeText(requireContext(), "Email invalidate", Toast.LENGTH_LONG).show();
+            }
         });
 
         getBinding().edtFirstName.addTextChangedListener(textWatcher());
@@ -66,5 +93,20 @@ public class LoginUsernameFragment extends BaseFragment<FragmentLoginUsernameBin
                 }
             }
         };
+    }
+
+    private void register(String email, String password, String firstName, String lastName) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(it -> {
+                    if (it.isSuccessful()) {
+                        String userId = it.getResult().getUser().getUid();
+                        userRepository.createUser(new User(userId, email, firstName, lastName, password));
+                        newsfeedRepository.createNewsfeed(new Newsfeed(userId));
+                        Toast.makeText(requireContext(), "Register success!", Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(getView()).navigate(R.id.action_loginUsernameFragment_to_loginFragment);
+                    } else {
+                        Toast.makeText(requireContext(), "Account is Invalid!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

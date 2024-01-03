@@ -49,6 +49,8 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation("com.google.firebase:firebase-firestore")
 
     // Navigation graph
     implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")

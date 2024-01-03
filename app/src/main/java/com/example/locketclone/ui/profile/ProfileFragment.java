@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import androidx.navigation.Navigation;
 
+import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentProfileBinding;
@@ -34,6 +35,15 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
 
         getBinding().btnEditAvatar.setOnClickListener(view -> {
             Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_editUsernameFragment);
+        });
+
+        getBinding().btnSignOut.setOnClickListener(view -> {
+            MyApplication.clearUserId();
+            Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_loginFragment);
+        });
+
+        getBinding().btnBack.setOnClickListener(view -> {
+            Navigation.findNavController(getView()).popBackStack();
         });
     }
 

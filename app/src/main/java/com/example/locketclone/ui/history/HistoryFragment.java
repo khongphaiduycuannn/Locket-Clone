@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,6 +71,10 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
 
         getBinding().toolbar.btnPostSetting.setOnClickListener(view -> {
             showSettingDialog();
+        });
+
+        getBinding().toolbar.btnBack.setOnClickListener(view -> {
+            Navigation.findNavController(getView()).popBackStack();
         });
 
         historyViewModel.currentPos.observe(getViewLifecycleOwner(), position -> {
