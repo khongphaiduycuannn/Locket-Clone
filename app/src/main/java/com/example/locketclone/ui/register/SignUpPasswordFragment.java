@@ -1,8 +1,6 @@
 package com.example.locketclone.ui.register;
 
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,6 +14,7 @@ import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentSignUpPasswordBinding;
+import com.example.locketclone.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordBinding> {
@@ -23,6 +22,8 @@ public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordB
     private SignUpViewModel signUpViewModel;
 
     private FirebaseAuth firebaseAuth;
+
+    private UserRepository userRepository = new UserRepository();
 
     @Override
     public void initData() {
@@ -90,9 +91,12 @@ public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordB
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(it -> {
                     if (it.isSuccessful()) {
-                        MyApplication.setUserId(it.getResult().getUser().getUid());
+                        String userId = it.getResult().getUser().getUid();
+                        MyApplication.setUserId(userId);
                         Toast.makeText(requireContext(), "Login success!", Toast.LENGTH_LONG).show();
-                        Navigation.findNavController(getView()).navigate(R.id.action_signUpPasswordFragment_to_cameraFragment);
+                        userRepository.getUserById(userId, () -> {
+                            Navigation.findNavController(getView()).navigate(R.id.action_signUpPasswordFragment_to_cameraFragment);
+                        });
                     } else {
                         Toast.makeText(requireContext(), "Email or password is incorrect!", Toast.LENGTH_LONG).show();
                     }

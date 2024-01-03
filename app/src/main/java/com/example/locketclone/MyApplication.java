@@ -4,9 +4,13 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.locketclone.model.User;
+
 public class MyApplication extends Application {
 
     private static Context context;
+
+    private static User currentUser;
 
     @Override
     public void onCreate() {
@@ -31,5 +35,13 @@ public class MyApplication extends Application {
     public static void clearUserId() {
         SharedPreferences setting = getAppContext().getSharedPreferences("app_status", 0);
         setting.edit().remove("user_id").apply();
+    }
+
+    public static User getUser() {
+        return currentUser;
+    }
+
+    public static void setUser(User user) {
+        currentUser = user;
     }
 }
