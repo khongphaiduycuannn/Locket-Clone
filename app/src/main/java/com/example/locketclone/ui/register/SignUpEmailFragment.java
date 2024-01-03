@@ -46,29 +46,12 @@ public class SignUpEmailFragment extends BaseFragment<FragmentSignUpEmailBinding
             Navigation.findNavController(getView()).popBackStack();
         });
 
-        getBinding().btnUsePhone.setOnClickListener(view -> {
-            usePhone();
-        });
-
         getBinding().edtEmail.addTextChangedListener(textWatcher());
     }
 
     @Override
     protected FragmentSignUpEmailBinding inflateViewBinding(LayoutInflater inflater) {
         return FragmentSignUpEmailBinding.inflate(inflater);
-    }
-
-    private void usePhone() {
-        String status = getBinding().btnUsePhone.getText().toString();
-        if (status.equals("Use phone instead")) {
-            getBinding().txtTitle.setText("What's your phone?");
-            getBinding().btnUsePhone.setText("Use email instead");
-            getBinding().edtEmail.setHint("Phone number");
-        } else {
-            getBinding().txtTitle.setText("What's your email?");
-            getBinding().btnUsePhone.setText("Use phone instead");
-            getBinding().edtEmail.setHint("Email address");
-        }
     }
 
     private TextWatcher textWatcher() {

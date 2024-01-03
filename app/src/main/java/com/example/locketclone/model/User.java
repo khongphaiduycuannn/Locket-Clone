@@ -1,5 +1,7 @@
 package com.example.locketclone.model;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String userId;
@@ -13,6 +15,27 @@ public class User {
     private String password;
 
     private String phone;
+
+    private ArrayList<String> friends = new ArrayList<>();
+
+    public User() {
+    }
+
+    public User(String userId, String email, String firstName, String lastName, String password) {
+        this.userId = userId;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
+    }
 
     public String getUserId() {
         return userId;
@@ -59,18 +82,6 @@ public class User {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public User() {
-    }
-
-    public User(String userId, String email, String firstName, String lastName, String password, String phone) {
-        this.userId = userId;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
         this.phone = phone;
     }
 }

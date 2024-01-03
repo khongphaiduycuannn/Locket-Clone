@@ -4,8 +4,10 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.locketclone.R;
@@ -14,9 +16,11 @@ import com.example.locketclone.databinding.FragmentLoginPasswordBinding;
 
 public class LoginPasswordFragment extends BaseFragment<FragmentLoginPasswordBinding> {
 
+    private LoginViewModel loginViewModel;
+
     @Override
     public void initData() {
-
+        loginViewModel = new ViewModelProvider(getActivity()).get(LoginViewModel.class);
     }
 
     @Override
@@ -26,12 +30,18 @@ public class LoginPasswordFragment extends BaseFragment<FragmentLoginPasswordBin
 
     @Override
     public void initEvent() {
-        getBinding().btnContinue.setOnClickListener(view -> {
-            Navigation.findNavController(getView()).navigate(R.id.action_loginPasswordFragment_to_loginUsernameFragment);
-        });
-
         getBinding().btnBack.setOnClickListener(view -> {
             Navigation.findNavController(getView()).popBackStack();
+        });
+
+        getBinding().btnContinue.setOnClickListener(view -> {
+            String password = getBinding().edtPassword.getText().toString();
+            if (!password.isEmpty() && !password.isBlank()) {
+                loginViewModel.password = password;
+                Navigation.findNavController(getView()).navigate(R.id.action_loginPasswordFragment_to_loginUsernameFragment);
+            } else {
+                Toast.makeText(requireContext(), "Password invalidate", Toast.LENGTH_LONG).show();
+            }
         });
 
         getBinding().edtPassword.addTextChangedListener(textWatcher());

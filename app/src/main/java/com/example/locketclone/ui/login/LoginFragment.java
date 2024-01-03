@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 
 import androidx.navigation.Navigation;
 
+import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentLoginBinding;
@@ -17,7 +18,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     @Override
     public void initView() {
-
+        checkUserId();
     }
 
     @Override
@@ -34,5 +35,12 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     @Override
     protected FragmentLoginBinding inflateViewBinding(LayoutInflater inflater) {
         return FragmentLoginBinding.inflate(inflater);
+    }
+
+    private void checkUserId() {
+        String userId = MyApplication.getUserId();
+        if (!(userId == null || userId.isEmpty() || userId.isBlank())) {
+            Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_cameraFragment2);
+        }
     }
 }
