@@ -155,6 +155,9 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
                     public void onStart(String requestId) {
                         getBinding().icSend.setVisibility(View.GONE);
                         getBinding().icLoading.setVisibility(View.VISIBLE);
+                        getBinding().btnDownload.setEnabled(false);
+                        getBinding().btnCancel.setEnabled(false);
+                        getBinding().btnSend.setEnabled(false);
                     }
 
                     @Override
@@ -166,7 +169,9 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
                     public void onSuccess(String requestId, Map resultData) {
                         getBinding().icSend.setVisibility(View.VISIBLE);
                         getBinding().icLoading.setVisibility(View.GONE);
-
+                        getBinding().btnDownload.setEnabled(true);
+                        getBinding().btnCancel.setEnabled(true);
+                        getBinding().btnSend.setEnabled(true);
                         String imageUrl = MediaManager.get().url().generate(resultData.get("public_id").toString());
                         String content = getBinding().edtPhotoContent.getText().toString();
                         Post post = new Post(content, new Date(), imageUrl, MyApplication.getUserId());

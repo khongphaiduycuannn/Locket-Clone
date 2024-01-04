@@ -67,10 +67,14 @@ public class ProfileFragment extends BaseFragment<FragmentProfileBinding> {
                         tempUser.setAvatar(avatarUrl);
                         userRepository.updateUser(tempUser, it -> {
                             currentUser.setUser(tempUser);
-                            Glide.with(getBinding().imgAvatar.getContext())
-                                    .load(currentUser.getAvatar())
-                                    .into(getBinding().imgAvatar);
-                            Toast.makeText(requireContext(), "Change success!", Toast.LENGTH_LONG).show();
+                            try {
+                                Glide.with(getBinding().imgAvatar.getContext())
+                                        .load(currentUser.getAvatar())
+                                        .into(getBinding().imgAvatar);
+                                Toast.makeText(getActivity(), "Change success!", Toast.LENGTH_LONG).show();
+                            } catch (Exception ignored) {
+
+                            }
                         });
                     }
 
