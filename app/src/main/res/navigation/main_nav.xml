@@ -26,7 +26,11 @@
             app:popExitAnim="@anim/transition_right_out" />
         <action
             android:id="@+id/action_loginFragment_to_cameraFragment2"
-            app:destination="@id/cameraFragment" />
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
     </fragment>
     <fragment
         android:id="@+id/loginEmailFragment"

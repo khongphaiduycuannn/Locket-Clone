@@ -14,8 +14,11 @@ import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentSignUpPasswordBinding;
+import com.example.locketclone.model.User;
 import com.example.locketclone.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordBinding> {
 
@@ -94,7 +97,17 @@ public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordB
                         String userId = it.getResult().getUser().getUid();
                         MyApplication.setUserId(userId);
                         Toast.makeText(requireContext(), "Login success!", Toast.LENGTH_LONG).show();
-                        userRepository.getUserById(userId, () -> {
+                        userRepository.getUserById(userId, doc -> {
+                            String userID = (String) doc.getData().get("userId");
+                            String firstName = (String) doc.getData().get("firstName");
+                            String lastName = (String) doc.getData().get("lastName");
+                            String avatar = (String) doc.getData().get("avatar");
+                            String curEmail = (String) doc.getData().get("email");
+                            String phone = (String) doc.getData().get("phone");
+                            String curPassword = (String) doc.getData().get("password");
+                            ArrayList<String> friends = (ArrayList<String>) doc.getData().get("friends");
+                            User user = new User(userID, curEmail, curPassword, firstName, lastName, avatar, phone, friends);
+                            MyApplication.setUser(user);
                             Navigation.findNavController(getView()).navigate(R.id.action_signUpPasswordFragment_to_cameraFragment);
                         });
                     } else {

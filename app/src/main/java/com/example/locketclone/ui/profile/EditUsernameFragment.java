@@ -34,6 +34,7 @@ public class EditUsernameFragment extends BaseFragment<FragmentEditUsernameBindi
 
     @Override
     public void initEvent() {
+        getBinding().btnSave.setEnabled(false);
         getBinding().btnSave.setOnClickListener(view -> {
             User tempUser = new User();
             tempUser.setUser(currentUser);
@@ -76,12 +77,12 @@ public class EditUsernameFragment extends BaseFragment<FragmentEditUsernameBindi
                 String s = editable.toString();
                 if (s.isEmpty()) {
                     getBinding().btnSave.setEnabled(false);
-                    getBinding().txtSave.setTextColor(Color.parseColor("#505052"));
-                    getBinding().btnSave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_btn_continue_disable));
+                    getBinding().txtSave.setTextColor(Color.parseColor("#FFFFFF"));
+                    getBinding().txtSave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_btn_continue_disable));
                 } else {
                     getBinding().btnSave.setEnabled(true);
                     getBinding().txtSave.setTextColor(Color.parseColor("#101010"));
-                    getBinding().btnSave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_btn_continue_enable));
+                    getBinding().txtSave.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_btn_continue_enable));
                 }
             }
         };
