@@ -1,12 +1,18 @@
 package com.example.locketclone.ui.login;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.navigation.Navigation;
 
 import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
+import com.example.locketclone.databinding.DialogDisableViewBinding;
 import com.example.locketclone.databinding.FragmentLoginBinding;
 import com.example.locketclone.model.Newsfeed;
 import com.example.locketclone.model.User;
@@ -21,9 +27,12 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     private NewsfeedRepository newsfeedRepository = new NewsfeedRepository();
 
-    @Override
-    public void initData() {
+    private Dialog dialog;
 
+    @Override
+
+    public void initData() {
+        dialog = new Dialog(requireContext());
     }
 
     @Override
@@ -33,6 +42,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     @Override
     public void initEvent() {
+        initDialog();
         checkUserId();
         getBinding().btnSignUp.setOnClickListener(view -> {
             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_loginEmailFragment);
@@ -56,6 +66,7 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
     private void checkUserId() {
         String userId = MyApplication.getUserId();
         if (!(userId == null || userId.isEmpty() || userId.isBlank())) {
+            dialog.show();
             userRepository.getUserById(userId, doc -> {
                 String userID = (String) doc.getData().get("userId");
                 String firstName = (String) doc.getData().get("firstName");
@@ -77,9 +88,25 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                         MyApplication.setNewsfeed(newsfeed);
                         newsfeedRepository.updateNewsfeedPost(newsfeed);
                     }
+                    dialog.dismiss();
                     Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_cameraFragment2);
                 });
             });
         }
+    }
+
+    private void initDialog() {
+        DialogDisableViewBinding binding = DialogDisableViewBinding.inflate(getLayoutInflater());
+        dialog.setContentView(binding.getRoot());
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT
+            );
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            window.setDimAmount(0.5F);
+        }
+        dialog.setCancelable(false);
     }
 }

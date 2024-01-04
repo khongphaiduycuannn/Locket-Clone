@@ -26,9 +26,9 @@
                 android:id="@+id/img_post_image"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:scaleType="centerCrop"
                 android:background="#101010"
                 android:rotation="90"
+                android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -85,6 +85,151 @@
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="3d" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_post_owner"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="4dp">
+
+        <FrameLayout
+            android:id="@+id/btn_emoji_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_face_tw" />
+
+            <TextView
+                android:id="@+id/txt_count_one"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/bg_emoji_count"
+                android:fontFamily="@font/varela"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_emoji_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_face_haha" />
+
+            <TextView
+                android:id="@+id/txt_count_two"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/bg_emoji_count"
+                android:fontFamily="@font/varela"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_emoji_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_face_huhu" />
+
+            <TextView
+                android:id="@+id/txt_count_three"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/bg_emoji_count"
+                android:fontFamily="@font/varela"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_emoji_four"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_face_woe" />
+
+            <TextView
+                android:id="@+id/txt_count_four"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/bg_emoji_count"
+                android:fontFamily="@font/varela"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/btn_emoji_five"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:padding="4dp">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_face_angry" />
+
+            <TextView
+                android:id="@+id/txt_count_five"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/bg_emoji_count"
+                android:fontFamily="@font/varela"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </FrameLayout>
     </LinearLayout>
 
     <Space
