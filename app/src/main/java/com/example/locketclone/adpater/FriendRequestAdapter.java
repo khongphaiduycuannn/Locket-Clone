@@ -8,14 +8,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.locketclone.R;
 import com.example.locketclone.databinding.ItemFriendRequestBinding;
+import com.example.locketclone.repository.UserRepository;
 
 import java.util.ArrayList;
 
-public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.FriendRequestViewHolder> {
+public abstract class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.FriendRequestViewHolder> {
 
     private ArrayList<String> listFriendRequest = new ArrayList<>();
+
+    private UserRepository userRepository = new UserRepository();
 
     @NonNull
     @Override
@@ -31,7 +35,32 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     @Override
     public void onBindViewHolder(@NonNull FriendRequestViewHolder holder, int position) {
+        userRepository.getUserById(listFriendRequest.get(position), doc -> {
+            if (doc.getData() == null)
+                return;
 
+            String firstName = (String) doc.getData().get("firstName");
+            String lastName = (String) doc.getData().get("lastName");
+
+            String username;
+            if (firstName == null)
+                username = lastName;
+            else if (lastName == null)
+                username = firstName;
+            else username = firstName + " " + lastName;
+
+            String avatar = (String) doc.getData().get("avatar");
+            if (avatar == null)
+                avatar = "https://res.cloudinary.com/dh9ougddd/image/upload/v1693305148/m1nhqsruh3ydexbr0wqq.webp";
+            holder.binding.txtUsername.setText(username);
+            Glide.with(holder.binding.imgAvatar)
+                    .load(avatar)
+                    .into(holder.binding.imgAvatar);
+        });
+
+        holder.binding.btnAccept.setOnClickListener(view -> {
+            onClickItem(listFriendRequest.get(position));
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -49,4 +78,6 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
             binding = ItemFriendRequestBinding.bind(view);
         }
     }
+
+    public abstract void onClickItem(String userRequestId);
 }
