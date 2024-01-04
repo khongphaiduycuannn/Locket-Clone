@@ -1,5 +1,6 @@
 package com.example.locketclone.repository;
 
+import com.example.locketclone.model.Post;
 import com.example.locketclone.model.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -34,6 +35,12 @@ public class UserRepository {
     public void getUserById(String userId, UserOnSuccess task) {
         firebaseStore.collection("user")
                 .document(userId)
+                .get()
+                .addOnSuccessListener(task::onSuccess);
+    }
+
+    public void getAllUser(PostOnSuccess task) {
+        firebaseStore.collection("user")
                 .get()
                 .addOnSuccessListener(task::onSuccess);
     }
