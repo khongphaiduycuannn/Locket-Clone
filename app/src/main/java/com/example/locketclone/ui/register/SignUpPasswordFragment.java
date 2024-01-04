@@ -14,7 +14,9 @@ import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentSignUpPasswordBinding;
+import com.example.locketclone.model.Newsfeed;
 import com.example.locketclone.model.User;
+import com.example.locketclone.repository.NewsfeedRepository;
 import com.example.locketclone.repository.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,6 +29,8 @@ public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordB
     private FirebaseAuth firebaseAuth;
 
     private UserRepository userRepository = new UserRepository();
+
+    private NewsfeedRepository newsfeedRepository = new NewsfeedRepository();
 
     @Override
     public void initData() {
@@ -106,9 +110,20 @@ public class SignUpPasswordFragment extends BaseFragment<FragmentSignUpPasswordB
                             String phone = (String) doc.getData().get("phone");
                             String curPassword = (String) doc.getData().get("password");
                             ArrayList<String> friends = (ArrayList<String>) doc.getData().get("friends");
-                            User user = new User(userID, curEmail, curPassword, firstName, lastName, avatar, phone, friends);
+
+                            User user = new User(userID, email, password, firstName, lastName, avatar, phone, friends);
                             MyApplication.setUser(user);
-                            Navigation.findNavController(getView()).navigate(R.id.action_signUpPasswordFragment_to_cameraFragment);
+                            newsfeedRepository.getNewsfeedByUserId(userID, it2 -> {
+                                if (!it2.getDocuments().isEmpty()) {
+                                    String newsfeedId = (String) it2.getDocuments().get(0).getData().get("newsfeedId");
+                                    ArrayList<String> posts = (ArrayList<String>) it2.getDocuments().get(0).getData().get("posts");
+
+                                    Newsfeed newsfeed = new Newsfeed(newsfeedId, userID, posts);
+                                    MyApplication.setNewsfeed(newsfeed);
+                                    newsfeedRepository.updateNewsfeedPost(newsfeed);
+                                }
+                                Navigation.findNavController(getView()).navigate(R.id.action_signUpPasswordFragment_to_cameraFragment);
+                            });
                         });
                     } else {
                         Toast.makeText(requireContext(), "Email or password is incorrect!", Toast.LENGTH_LONG).show();

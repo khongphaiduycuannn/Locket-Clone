@@ -14,11 +14,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.locketclone.R;
 import com.example.locketclone.databinding.ItemPostBinding;
+import com.example.locketclone.repository.PostRepository;
 import com.example.locketclone.ui.history.HistoryViewModel;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @SuppressLint("ClickableViewAccessibility")
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
@@ -27,6 +31,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     private ArrayList<String> listPosts = new ArrayList<>();
 
     private HistoryViewModel historyViewModel;
+
+    private PostRepository postRepository = new PostRepository();
 
     public PostAdapter(Fragment fragment) {
         this.fragment = fragment;
@@ -49,13 +55,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        holder.binding.image.setImageDrawable(
-                AppCompatResources.getDrawable(
-                        holder.binding.image.getContext(),
-                        R.drawable.image
-                )
-        );
-
+        int sz = getItemCount();
+        if (sz == 0) return;
+        postRepository.getPostById(listPosts.get(sz - position - 1), it -> {
+            if (it.getData() != null) {
+                String image = (String) it.getData().get("image");
+                Glide.with(holder.binding.image.getContext())
+                        .load(image).into(holder.binding.image);
+            }
+        });
         holder.binding.imageContainer.setOnTouchListener((view, motionEvent) ->
                 onImageTouch(view, motionEvent, position)
         );

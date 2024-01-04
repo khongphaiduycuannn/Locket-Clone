@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.locketclone.MyApplication;
 import com.example.locketclone.adpater.FriendAdapter;
 import com.example.locketclone.adpater.FriendRequestAdapter;
+import com.example.locketclone.adpater.FriendSearchAdapter;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentFriendsBinding;
 import com.example.locketclone.model.User;
 import com.example.locketclone.repository.UserRepository;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
@@ -23,13 +27,19 @@ public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
 
     private FriendRequestAdapter friendRequestAdapter;
 
-    private UserRepository userRepository = new UserRepository();
+    private FriendSearchAdapter friendSearchAdapter;
+
+    private final UserRepository userRepository = new UserRepository();
 
     private ArrayList<String> data = MyApplication.getUser().getFriends();
+
+    private boolean findStatus = true;
 
     private ArrayList<String> friend = new ArrayList<>();
 
     private ArrayList<String> friendRequest = new ArrayList<>();
+
+    private ArrayList<String> friendSearch = new ArrayList<>();
 
     @Override
     public void initData() {
@@ -43,6 +53,12 @@ public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
             @Override
             public void onClickItem(String userRequestId) {
                 onFriendAcceptClick(userRequestId);
+            }
+        };
+        friendSearchAdapter = new FriendSearchAdapter() {
+            @Override
+            public void onClickItem(String userSearchId) {
+                onFriendAddClick(userSearchId);
             }
         };
     }
@@ -64,6 +80,50 @@ public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
             }
         });
         getBinding().rclFriendRequests.setAdapter(friendRequestAdapter);
+
+        getBinding().rclFriendSearch.setLayoutManager(new LinearLayoutManager(requireContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        getBinding().rclFriendSearch.setAdapter(friendSearchAdapter);
+
+        getBinding().btnFind.setOnClickListener(view -> {
+            if (findStatus) {
+                String nameSearch = getBinding().edtSearch.getText().toString();
+                friendSearch.clear();
+                if (!nameSearch.isEmpty() && !nameSearch.isBlank()) {
+                    userRepository.getAllUser(it -> {
+                        List<DocumentSnapshot> doc = it.getDocuments();
+                        if (!it.isEmpty()) {
+                            for (DocumentSnapshot item :
+                                    doc) {
+                                String firstName = (String) item.getData().get("firstName");
+                                String lastName = (String) item.getData().get("lastName");
+                                String username = firstName + " " + lastName;
+                                if (username.contains(nameSearch))
+                                    friendSearch.add((String) item.getData().get("userId"));
+                            }
+
+                            if (friendSearch.isEmpty()) {
+                                Toast.makeText(requireContext(), "User not found", Toast.LENGTH_LONG).show();
+                            }
+                            friendSearchAdapter.setListFriendSearch(friendSearch);
+                            getBinding().btnFind.setText("Cancel");
+                            findStatus = !findStatus;
+                        }
+                    });
+                }
+            }
+            else {
+                getBinding().btnFind.setText("Find");
+                getBinding().edtSearch.setText("");
+                friendSearch.clear();
+                friendSearchAdapter.setListFriendSearch(friendSearch);
+                findStatus = !findStatus;
+            }
+        });
 
         setData();
 
@@ -177,6 +237,45 @@ public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
                         userRepository.updateUser(userRequestId, data, it1 -> {
                         });
                     }
+                }
+            });
+        }
+    }
+
+    private void onFriendAddClick(String userSearchId) {
+        if (userSearchId.equals(MyApplication.getUserId())) {
+            Toast.makeText(requireContext(), "Hehe", Toast.LENGTH_LONG).show();
+            return;
+        }
+        for (String item :
+                data) {
+            if (item.split("_")[0].equals(userSearchId)) {
+                Toast.makeText(requireContext(), "User is already in friends list", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        data.add(userSearchId + "_request");
+        User user = MyApplication.getUser();
+        user.setFriends(data);
+        MyApplication.setUser(user);
+
+        if (friendSearch.contains(userSearchId)) {
+            friendSearch.remove(userSearchId);
+            friendSearchAdapter.setListFriendSearch(friendSearch);
+
+            userRepository.updateUser(user, it -> {
+                Toast.makeText(requireContext(), "Sending your request", Toast.LENGTH_LONG).show();
+            });
+
+            userRepository.getUserById(userSearchId, it -> {
+                if (it.getData() != null) {
+                    ArrayList<String> newList = (ArrayList<String>) it.getData().get("friends");
+                    if (!newList.contains(MyApplication.getUserId() + "_pending"))
+                        newList.add(MyApplication.getUserId() + "_pending");
+                    Map<String, Object> mp = new HashMap<>();
+                    mp.put("friends", newList);
+                    userRepository.updateUser(userSearchId, mp, res -> {});
                 }
             });
         }

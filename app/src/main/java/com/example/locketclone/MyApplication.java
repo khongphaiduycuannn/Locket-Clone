@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.locketclone.model.Newsfeed;
 import com.example.locketclone.model.User;
 
 public class MyApplication extends Application {
@@ -11,6 +12,8 @@ public class MyApplication extends Application {
     private static Context context;
 
     private static User currentUser;
+
+    private static Newsfeed currentNewsfeed;
 
     @Override
     public void onCreate() {
@@ -43,5 +46,13 @@ public class MyApplication extends Application {
 
     public static void setUser(User user) {
         currentUser = user;
+    }
+
+    public static Newsfeed getNewsfeed() {
+        return currentNewsfeed;
+    }
+
+    public static void setNewsfeed(Newsfeed newsfeed) {
+        currentNewsfeed = newsfeed;
     }
 }

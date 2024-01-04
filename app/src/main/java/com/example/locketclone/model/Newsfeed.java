@@ -13,6 +13,12 @@ public class Newsfeed {
     public Newsfeed() {
     }
 
+    public Newsfeed(String newsfeedId, String userId, ArrayList<String> posts) {
+        this.newsfeedId = newsfeedId;
+        this.userId = userId;
+        this.posts = posts;
+    }
+
     public Newsfeed(String userId) {
         this.userId = userId;
     }

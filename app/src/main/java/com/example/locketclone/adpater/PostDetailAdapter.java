@@ -11,11 +11,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.locketclone.R;
 import com.example.locketclone.databinding.ItemPostDetailBinding;
+import com.example.locketclone.model.Post;
+import com.example.locketclone.repository.PostRepository;
+import com.example.locketclone.repository.UserRepository;
 import com.example.locketclone.ui.history.HistoryViewModel;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PostDetailAdapter extends RecyclerView.Adapter<PostDetailAdapter.PostDetailViewHolder> {
 
@@ -23,6 +29,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<PostDetailAdapter.Po
     private ArrayList<String> listPostsDetail = new ArrayList<>();
 
     private HistoryViewModel historyViewModel;
+
+    private PostRepository postRepository = new PostRepository();
+
+    private UserRepository userRepository = new UserRepository();
 
     public PostDetailAdapter(Fragment fragment) {
         this.fragment = fragment;
@@ -45,15 +55,38 @@ public class PostDetailAdapter extends RecyclerView.Adapter<PostDetailAdapter.Po
 
     @Override
     public void onBindViewHolder(@NonNull PostDetailViewHolder holder, int position) {
-        holder.binding.imgPostImage.setImageDrawable(
-                AppCompatResources.getDrawable(
-                        holder.binding.imgPostImage.getContext(),
-                        R.drawable.image
-                )
-        );
-        holder.binding.imgPostContent.setText("One day");
-        holder.binding.txtPostOwner.setText("Duy Quan");
-        holder.binding.txtPostTimeCreated.setText(Integer.toString(position + 1) + "d");
+        int sz = getItemCount();
+        if (sz == 0) return;
+        postRepository.getPostById(listPostsDetail.get(sz - position - 1), it -> {
+            if (it.getData() != null) {
+                String content = (String) it.getData().get("content");
+                String image = (String) it.getData().get("image");
+                String userId = (String) it.getData().get("userId");
+                Date createdAt = ((Timestamp) it.getData().get("createdAt")).toDate();
+
+                Glide.with(holder.binding.imgPostImage.getContext())
+                        .load(image).into(holder.binding.imgPostImage);
+                holder.binding.imgPostContent.setText(content);
+
+                int timeDay = (int) (new Date().getDay() - createdAt.getDay());
+                int timeHours = (int) (new Date().getHours() - createdAt.getHours());
+                int timeMinutes = (int) (new Date().getMinutes() - createdAt.getMinutes());
+                if (timeDay < 1 && timeHours < 1) {
+                    holder.binding.txtPostTimeCreated.setText(Integer.toString(timeMinutes) + "m");
+                }
+                else if (timeDay < 1) {
+                    holder.binding.txtPostTimeCreated.setText(Integer.toString(timeHours) + "h");
+                }
+                else holder.binding.txtPostTimeCreated.setText(Integer.toString(timeDay) + "d");
+
+                userRepository.getUserById(userId, doc -> {
+                    if (doc.getData() != null) {
+                        String username = doc.get("firstName") + " " + doc.get("lastName");
+                        holder.binding.txtPostOwner.setText(username);
+                    }
+                });
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")

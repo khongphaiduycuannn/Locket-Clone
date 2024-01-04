@@ -72,18 +72,19 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/varela"
                 android:hint="Search and add friends"
-                android:inputType="text"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#AAAAAA"
                 android:textCursorDrawable="@drawable/edt_cursor"
                 android:textSize="19sp" />
 
             <TextView
+                android:id="@+id/btn_find"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/varela"
-                android:text="Cancel"
+                android:gravity="center"
+                android:text="Find"
                 android:textColor="#FFFFFF"
                 android:textSize="19sp"
                 android:textStyle="bold" />
@@ -92,7 +93,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcl_friend_search"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             tools:itemCount="3"
             tools:listitem="@layout/item_friend_search" />
