@@ -102,7 +102,7 @@ public class FriendsFragment extends BaseFragment<FragmentFriendsBinding> {
                                 String firstName = (String) item.getData().get("firstName");
                                 String lastName = (String) item.getData().get("lastName");
                                 String username = firstName + " " + lastName;
-                                if (username.contains(nameSearch))
+                                if (username.contains(nameSearch) || item.getData().get("email").equals(nameSearch))
                                     friendSearch.add((String) item.getData().get("userId"));
                             }
 

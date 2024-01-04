@@ -70,9 +70,9 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
             historyViewModel.setCurrentPos(Math.round(allPixels / itemHeight));
         });
 
-        getBinding().toolbar.btnPostSetting.setOnClickListener(view -> {
-            showSettingDialog();
-        });
+//        getBinding().toolbar.btnPostSetting.setOnClickListener(view -> {
+//            showSettingDialog();
+//        });
 
         getBinding().toolbar.btnBack.setOnClickListener(view -> {
             Navigation.findNavController(getView()).popBackStack();
@@ -123,14 +123,14 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
             recyclerListPost.setVisibility(View.VISIBLE);
             recyclerDetailPost.setVisibility(View.INVISIBLE);
             getBinding().bottomBar.setVisibility(View.INVISIBLE);
-            getBinding().toolbar.btnPostSetting.setVisibility(View.INVISIBLE);
+//            getBinding().toolbar.btnPostSetting.setVisibility(View.INVISIBLE);
         } else {
             fadeIn.setTarget(recyclerDetailPost);
             fadeOut.setTarget(recyclerListPost);
             recyclerListPost.setVisibility(View.INVISIBLE);
             recyclerDetailPost.setVisibility(View.VISIBLE);
             getBinding().bottomBar.setVisibility(View.VISIBLE);
-            getBinding().toolbar.btnPostSetting.setVisibility(View.VISIBLE);
+//            getBinding().toolbar.btnPostSetting.setVisibility(View.VISIBLE);
         }
         fadeIn.start();
         fadeOut.start();

@@ -37,12 +37,12 @@
 <!--            android:src="@drawable/ic_back_down" />-->
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btn_post_setting"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="end"
-        android:layout_marginHorizontal="15dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ic_more" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/btn_post_setting"-->
+<!--        android:layout_width="48dp"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:layout_gravity="end"-->
+<!--        android:layout_marginHorizontal="15dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:src="@drawable/ic_more" />-->
 </FrameLayout>
