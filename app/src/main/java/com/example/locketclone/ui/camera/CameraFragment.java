@@ -18,10 +18,16 @@ import androidx.navigation.Navigation;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
+import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.adpater.FriendChooseAdapter;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentCameraBinding;
+import com.example.locketclone.model.Newsfeed;
+import com.example.locketclone.model.Post;
+import com.example.locketclone.repository.NewsfeedRepository;
+import com.example.locketclone.repository.PostRepository;
+import com.example.locketclone.repository.UserRepository;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,6 +52,14 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
     private Camera.Parameters parameters;
 
     private FriendChooseAdapter friendChooseAdapter;
+
+    private ArrayList<String> friends = new ArrayList<>();
+
+    private final UserRepository userRepository = new UserRepository();
+
+    private final PostRepository postRepository = new PostRepository();
+
+    private final NewsfeedRepository newsfeedRepository = new NewsfeedRepository();
 
     private ArrayList<String> data = new ArrayList<>(Arrays.asList("A", "A", "A", "A", "A", "A"));
 
@@ -139,7 +153,8 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
                 MediaManager.get().upload(image).callback(new UploadCallback() {
                     @Override
                     public void onStart(String requestId) {
-
+                        getBinding().icSend.setVisibility(View.GONE);
+                        getBinding().icLoading.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -149,13 +164,28 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
 
                     @Override
                     public void onSuccess(String requestId, Map resultData) {
-                        Toast.makeText(requireContext(), "Upload success!", Toast.LENGTH_LONG).show();
-                        cameraViewModel.flipStatus();
+                        getBinding().icSend.setVisibility(View.VISIBLE);
+                        getBinding().icLoading.setVisibility(View.GONE);
+
+                        String imageUrl = MediaManager.get().url().generate(resultData.get("public_id").toString());
+                        String content = getBinding().edtPhotoContent.getText().toString();
+                        Post post = new Post(content, new Date(), imageUrl, MyApplication.getUserId());
+                        postRepository.createPost(post, friends, it -> {
+                            if (it.isSuccessful()) {
+                                Toast.makeText(requireContext(), "Upload success!", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Upload fail!", Toast.LENGTH_LONG).show();
+                            }
+                            cameraViewModel.flipStatus();
+                        });
                     }
 
                     @Override
                     public void onError(String requestId, ErrorInfo error) {
-
+                        getBinding().icSend.setVisibility(View.VISIBLE);
+                        getBinding().icLoading.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(), "Upload fail!", Toast.LENGTH_LONG).show();
+                        cameraViewModel.flipStatus();
                     }
 
                     @Override
@@ -172,6 +202,30 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
 
         cameraViewModel.status.observe(getViewLifecycleOwner(), this::onStatusChange);
         cameraViewModel.flashMode.observe(getViewLifecycleOwner(), this::onFlashModeChange);
+        userRepository.userSnapshotListener(MyApplication.getUserId(), (doc, exception) -> {
+            if (doc.getData() == null)
+                return;
+
+            ArrayList<String> temp = (ArrayList<String>) doc.getData().get("friends");
+            friends.clear();
+            friends.add(MyApplication.getUserId());
+            if (temp != null)
+                for (String item :
+                        temp) {
+                    if (item.split("_")[1].equals("friend"))
+                        friends.add(item.split("_")[0]);
+                }
+        });
+        newsfeedRepository.newsfeedSnapshotListener(MyApplication.getNewsfeed().getNewsfeedId(), (doc, exception) -> {
+            Map<String, Object> mp = doc.getData();
+            if (mp != null) {
+                String newsfeedId = (String) mp.get("newsfeedId");
+                String userId = (String) mp.get("userId");
+                ArrayList<String> posts = (ArrayList<String>) mp.get("posts");
+                Newsfeed newsfeed = new Newsfeed(newsfeedId, userId, posts);
+                MyApplication.setNewsfeed(newsfeed);
+            }
+        });
     }
 
     @Override
@@ -196,12 +250,17 @@ public class CameraFragment extends BaseFragment<FragmentCameraBinding> {
             camera.startPreview();
             getBinding().clTakePhoto.setVisibility(View.VISIBLE);
             getBinding().lnHistoryNav.setVisibility(View.VISIBLE);
+            getBinding().edtPhotoContent.setVisibility(View.GONE);
+            getBinding().edtPhotoContent.setText("");
             getBinding().lnFriendChoose.setVisibility(View.GONE);
             getBinding().clSendPhoto.setVisibility(View.GONE);
         } else {
             getBinding().clTakePhoto.setVisibility(View.GONE);
             getBinding().lnHistoryNav.setVisibility(View.GONE);
-            getBinding().lnFriendChoose.setVisibility(View.VISIBLE);
+            getBinding().edtPhotoContent.setVisibility(View.VISIBLE);
+            getBinding().edtPhotoContent.requestFocus();
+//            getBinding().lnFriendChoose.setVisibility(View.VISIBLE);
+            getBinding().lnFriendChoose.setVisibility(View.GONE);
             getBinding().clSendPhoto.setVisibility(View.VISIBLE);
         }
     }

@@ -5,10 +5,7 @@ import android.animation.AnimatorSet;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,11 +17,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.adpater.PostAdapter;
 import com.example.locketclone.adpater.PostDetailAdapter;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentHistoryBinding;
+import com.example.locketclone.model.Newsfeed;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +37,8 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
 
     private HistoryViewModel historyViewModel;
 
+    private Newsfeed newsfeed;
+
     private int currentPosition = 0;
     private float itemHeight = 0F;
     private float allPixels = 0F;
@@ -49,15 +50,15 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
     public void initData() {
         postAdapter = new PostAdapter(this);
         postDetailAdapter = new PostDetailAdapter(this);
-
         historyViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
     }
 
     @Override
     public void initView() {
+        newsfeed = MyApplication.getNewsfeed();
         getBinding().recyclerListPost.setLayoutManager(new GridLayoutManager(requireContext(), 3));
         getBinding().recyclerListPost.setAdapter(postAdapter);
-        postAdapter.setListPosts(data);
+        postAdapter.setListPosts(newsfeed.getPosts());
 
         getRecyclerPostDetail();
     }
@@ -172,7 +173,7 @@ public class HistoryFragment extends BaseFragment<FragmentHistoryBinding> {
                 });
 
                 recyclerDetail.setAdapter(postDetailAdapter);
-                postDetailAdapter.setListPosts(data);
+                postDetailAdapter.setListPosts(newsfeed.getPosts());
                 return true;
             }
         });

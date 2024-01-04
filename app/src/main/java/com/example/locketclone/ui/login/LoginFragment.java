@@ -8,14 +8,18 @@ import com.example.locketclone.MyApplication;
 import com.example.locketclone.R;
 import com.example.locketclone.base.BaseFragment;
 import com.example.locketclone.databinding.FragmentLoginBinding;
+import com.example.locketclone.model.Newsfeed;
 import com.example.locketclone.model.User;
+import com.example.locketclone.repository.NewsfeedRepository;
 import com.example.locketclone.repository.UserRepository;
 
 import java.util.ArrayList;
 
 public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
-    private UserRepository userRepository = new UserRepository();
+    private final UserRepository userRepository = new UserRepository();
+
+    private NewsfeedRepository newsfeedRepository = new NewsfeedRepository();
 
     @Override
     public void initData() {
@@ -24,11 +28,12 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
 
     @Override
     public void initView() {
-        checkUserId();
+
     }
 
     @Override
     public void initEvent() {
+        checkUserId();
         getBinding().btnSignUp.setOnClickListener(view -> {
             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_loginEmailFragment);
         });
@@ -36,6 +41,11 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
         getBinding().btnSignIn.setOnClickListener(view -> {
             Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_signUpEmailFragment);
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -55,9 +65,20 @@ public class LoginFragment extends BaseFragment<FragmentLoginBinding> {
                 String phone = (String) doc.getData().get("phone");
                 String password = (String) doc.getData().get("password");
                 ArrayList<String> friends = (ArrayList<String>) doc.getData().get("friends");
+
                 User user = new User(userID, email, password, firstName, lastName, avatar, phone, friends);
                 MyApplication.setUser(user);
-                Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_cameraFragment2);
+                newsfeedRepository.getNewsfeedByUserId(userID, it -> {
+                    if (!it.getDocuments().isEmpty()) {
+                        String newsfeedId = (String) it.getDocuments().get(0).getData().get("newsfeedId");
+                        ArrayList<String> posts = (ArrayList<String>) it.getDocuments().get(0).getData().get("posts");
+
+                        Newsfeed newsfeed = new Newsfeed(newsfeedId, userID, posts);
+                        MyApplication.setNewsfeed(newsfeed);
+                        newsfeedRepository.updateNewsfeedPost(newsfeed);
+                    }
+                    Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_cameraFragment2);
+                });
             });
         }
     }

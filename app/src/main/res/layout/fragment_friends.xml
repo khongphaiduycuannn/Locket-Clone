@@ -72,18 +72,18 @@
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/varela"
                 android:hint="Search and add friends"
-                android:inputType="text"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#AAAAAA"
                 android:textCursorDrawable="@drawable/edt_cursor"
                 android:textSize="19sp" />
 
             <TextView
-                android:layout_width="70dp"
+                android:id="@+id/btn_find"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/varela"
-                android:text="Cancel"
+                android:text="Find"
                 android:textColor="#FFFFFF"
                 android:textSize="19sp"
                 android:textStyle="bold" />
